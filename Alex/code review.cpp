@@ -186,8 +186,18 @@ int main() {
       cin >> userName_input;
 
       for (Post post: AllPosts) {
-        if (post.userID == userName_input){
+        if (post.visibility == "public"){
           cout << post.postID << "\n";
+        } else if (post.visibility == "friend") {
+          for (User user: AllUsers) {
+            if (user.username == post.userID) {
+              for (const string & friendName : user.friends) {
+                if (friendName == userName_input) {
+                  cout << post.postID << "\n";
+                }
+              }
+            }
+          }
         }
       }
   
