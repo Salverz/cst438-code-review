@@ -11,28 +11,84 @@ public class Main {
     }
 
     class User {
-        String username;
-        String displayName;
-        String state;
-        ArrayList<String> friends;
+        private String username;
+        private String displayName;
+        private String state;
+        private ArrayList<String> friends;
 
-        User() {
+        public User() {
             this.username = "";
             this.displayName = "";
             this.state = "";
             this.friends = new ArrayList<>();
         }
+
+        public String getUsername() {
+            return username;
+        }
+
+        public void setUsername(String username) {
+            this.username = username;
+        }
+
+        public String getDisplayName() {
+            return displayName;
+        }
+
+        public void setDisplayName(String displayName) {
+            this.displayName = displayName;
+        }
+
+        public String getState() {
+            return state;
+        }
+
+        public void setState(String state) {
+            this.state = state;
+        }
+
+        public ArrayList<String> getFriends() {
+            return friends;
+        }
+
+        public void setFriends(ArrayList<String> friends) {
+            this.friends = friends;
+        }
     }
 
     class Post {
-        String postId;
-        String userId;
-        String visibility;
+        private String postId;
+        private String userId;
+        private String visibility;
 
-        Post() {
+        public Post() {
             this.postId = "";
             this.userId = "";
             this.visibility = "";
+        }
+
+        public String getPostId() {
+            return postId;
+        }
+
+        public void setPostId(String postId) {
+            this.postId = postId;
+        }
+
+        public String getUserId() {
+            return userId;
+        }
+
+        public void setUserId(String userId) {
+            this.userId = userId;
+        }
+
+        public String getVisibility() {
+            return visibility;
+        }
+
+        public void setVisibility(String visibility) {
+            this.visibility = visibility;
         }
     }
 
@@ -87,9 +143,9 @@ public class Main {
                 String line = s.nextLine();
                 // Split the line on ; and assign each of the arguments to a user object
                 String[] arguments = line.split(";");
-                user.username = arguments[0];
-                user.displayName = arguments[1];
-                user.state = arguments[2];
+                user.setUsername(arguments[0]);
+                user.setDisplayName(arguments[1]);
+                user.setState(arguments[2]);
                 String[] friends = arguments[3]
                         .replace("[", "")
                         .replace("]", "")
@@ -113,9 +169,9 @@ public class Main {
                 String line = s.nextLine();
                 // Split the line on ; and assign each of the arguments to a user object
                 String[] arguments = line.split(";");
-                post.postId = arguments[0];
-                post.userId = arguments[1];
-                post.visibility = arguments[2];
+                post.setPostId(arguments[0]);
+                post.setUserId(arguments[1]);
+                post.setVisibility(arguments[2]);
                 // Add the user to the post list
                 main.posts.add(post);
             }
@@ -135,29 +191,29 @@ public class Main {
 
         // Loop through all posts to find the requested post
         for (Post post : main.posts) {
-            if (!post.postId.equals(postId)) {
+            if (!post.getPostId().equals(postId)) {
                 continue;
             }
 
-            if (post.visibility.equals("public")) {
+            if (post.getVisibility().equals("public")) {
                 System.out.println("Access Permitted");
                 return;
             }
 
             // If the requested user is the poster
-            if (post.userId.equals(username)) {
+            if (post.getUserId().equals(username)) {
                 System.out.println("Access Permitted");
                 return;
             }
 
             // If the post is "friends only", loop over all users to find the requested user
             for (User user : main.users) {
-                if (!post.userId.equals(user.username)) {
+                if (!post.getUserId().equals(user.getUsername())) {
                     continue;
                 }
 
                 // Check if the user is a friend of the poster
-                for (String friend : user.friends) {
+                for (String friend : user.getFriends()) {
                     if (!friend.equals(username)) {
                         continue;
                     }
@@ -181,7 +237,7 @@ public class Main {
         // Get the User object associated with the input username
         User inputUser = null;
         for (User user : main.users) {
-            if (user.username.equals(username)) {
+            if (user.getUsername().equals(username)) {
                 inputUser = user;
                 break;
             }
@@ -194,21 +250,21 @@ public class Main {
         ArrayList<String> visibilePostIds = new ArrayList<>();
         for (Post post : main.posts) {
             // If post is public
-            if (post.visibility.equals("public")) {
-                visibilePostIds.add(post.postId);
+            if (post.getVisibility().equals("public")) {
+                visibilePostIds.add(post.getPostId());
                 continue;
             }
 
             // If the user is the poster
-            if (post.userId.equals(username)) {
-                visibilePostIds.add(post.postId);
+            if (post.getUserId().equals(username)) {
+                visibilePostIds.add(post.getPostId());
                 continue;
             }
 
             // Check if the user is a friend of the poster
             for (String friend : inputUser.friends) {
-                if (friend.equals(post.userId)) {
-                    visibilePostIds.add(post.postId);
+                if (friend.equals(post.getUserId())) {
+                    visibilePostIds.add(post.getPostId());
                 }
             }
         }
@@ -235,8 +291,8 @@ public class Main {
         // Loop over all users to check if their state matches the input state
         ArrayList<String> userDisplayNames = new ArrayList<>();
         for (User user : main.users) {
-            if (user.state.toLowerCase().equals(state)) {
-                userDisplayNames.add(user.displayName);
+            if (user.getState().toLowerCase().equals(state)) {
+                userDisplayNames.add(user.getDisplayName());
             }
         }
 
