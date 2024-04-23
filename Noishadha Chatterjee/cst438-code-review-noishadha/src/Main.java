@@ -85,10 +85,10 @@ public class Main
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(";");
-                String username = parts[0];
+                String username = parts[0];// This line extracts the username, display name, and state from the split parts of the line.
                 String displayName = parts[1];
                 String state = parts[2];
-                Set<String> friends = new HashSet<>(Arrays.asList(parts[3].replaceAll("[\\[\\]]", "").split(", ")));
+                Set<String> friends = new HashSet<>(Arrays.asList(parts[3].replaceAll("[\\[\\]]", "").split(", "))); // Creates a set of friends by removing brackets, splitting by comma and space, and converting it to a HashSet.
                 users.add(new User(username, displayName, state, friends));
             }
         } catch (IOException e) {
@@ -142,8 +142,7 @@ public class Main
         }
         return accessiblePosts;
     }
-
-
+    
     // Method to get users by location
     private static List<User> getUsersByLocation(String state) {
         List<User> usersInState = new ArrayList<>();
