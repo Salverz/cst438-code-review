@@ -8,24 +8,24 @@
 
 using namespace std;
 
-struct User {
+struct User { //structure for users
     string username;
     string displayName;
     string state;
     vector<string> friends;
 };
 
-struct Post {
+struct Post { //structure for posts
     string postId;
     string userId;
     string visibility;
 };
 
-vector<User> users;
-vector<Post> posts;
+vector<User> users; //global variable for users
+vector<Post> posts; //global variable for posts
 bool dataLoaded = false;  // Flag to check if data is loaded
 
-void loadUserData(string filename) {
+void loadUserData(string filename) { //this is meant to read in the user information
     ifstream file(filename);
     string entryLine;
     if (!file) {
@@ -53,7 +53,7 @@ void loadUserData(string filename) {
     dataLoaded = true;  // Set data loaded flag to true after successful load
 }
 
-void loadPostData(string filename){
+void loadPostData(string filename){ //this is meant to read in the post information
     ifstream file(filename);
     string entryLine;
     if (!file) {
@@ -70,7 +70,7 @@ void loadPostData(string filename){
     }
 }
 
-string checkVisibility(string postId, string username){
+string checkVisibility(string postId, string username){ //looking at the set visibility based on user; whether the posts are public or only for friends.
     if (!dataLoaded) {
         return "Please load data first";
     }
@@ -92,11 +92,20 @@ string checkVisibility(string postId, string username){
     return "Access Denied";
 }
 
-vector<string> retrievePosts(string username) {
+vector<string> retrievePosts(string username) { //retrieve posts that are available to username entered
     if (!dataLoaded) {
         return {"Please load data first"};
     }
+    int user = 0;
     vector<string> visiblePosts;
+    for(User users : users){
+      if(users.username == username){
+        user++;  
+      }
+    }
+    if(user == 0){
+      return {"Please enter a valid username"}; //error checking for username
+    }
     for (const Post& post : posts) {
         if (post.userId != username || 
             (post.visibility == "friend" && find_if(users.begin(), users.end(), [&post, &username](const User& u) {
@@ -108,7 +117,7 @@ vector<string> retrievePosts(string username) {
     return visiblePosts;
 }
 
-vector<string> searchUsersByLocation(string state){
+vector<string> searchUsersByLocation(string state){ //searches for users by state abbreviation
     if (!dataLoaded) {
         return {"Please load data first"};
     }
@@ -142,6 +151,14 @@ int main(){
                 cin >> postFile;
                 loadUserData(userFile);
                 loadPostData(postFile);
+                if (!dataLoaded) {
+                    cout << "Please load correct file paths!" << endl;
+                    break;
+                }
+                if(users.empty() || posts.empty()){
+                    cout << "Please load correct file paths!" << endl;
+                    break;
+                }
                 cout << "Data from user and post files successfully loaded!\n";
                 break;
             case 2:
